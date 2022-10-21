@@ -1,10 +1,10 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const User = mongoose.model("User");
+const express = require('express');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
 
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {
+router.post('/signup', async (req, res) => {
   const { email, password } = req.body;
 
     const user = new User({ email, password });
