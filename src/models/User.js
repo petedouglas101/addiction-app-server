@@ -11,6 +11,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  accountType: {
+    type: String,
+    required: true,
+  },
+  isOnline: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 userSchema.pre("save", function (next) {

@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 const communityFeedRoutes = require("./routes/communityFeedRoutes");
+const connectRoutes = require("./routes/connectRoutes");
 const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
@@ -12,6 +13,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(authRoutes);
 app.use(communityFeedRoutes);
+app.use(connectRoutes);
 
 const mongoURI =
   "mongodb+srv://root:root@cluster0.phlbqez.mongodb.net/?retryWrites=true&w=majority";
