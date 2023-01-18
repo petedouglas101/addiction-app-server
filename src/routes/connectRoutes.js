@@ -16,4 +16,13 @@ router.get("/volunteers", async (req, res) => {
   console.log(volunteers);
 });
 
+router.post("/addExpoPushToken", async (req, res) => {
+  const { expoPushToken } = req.body;
+  const user = await User.findOneAndUpdate(
+    { _id: req.user._id },
+    { expoPushToken }
+  );
+  res.send(user);
+});
+
 module.exports = router;

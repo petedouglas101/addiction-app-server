@@ -15,6 +15,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  expoPushToken: {
+    type: String,
+    required: false,
+  },
   isOnline: {
     type: Boolean,
     required: false,
