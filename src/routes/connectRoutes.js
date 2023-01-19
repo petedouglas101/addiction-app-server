@@ -13,7 +13,6 @@ router.get("/volunteers", async (req, res) => {
     isOnline: true,
   });
   res.send(volunteers);
-  console.log(volunteers);
 });
 
 router.post("/addExpoPushToken", async (req, res) => {
