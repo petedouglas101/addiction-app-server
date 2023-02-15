@@ -9,7 +9,6 @@ const router = express.Router();
 router.post("/pushNotification", async (req, res) => {
   const { volunteerId } = req.body;
   let expoPushToken = "";
-  console.log("Id from frontend", volunteerId);
 
   const user1 = User.findById(volunteerId, function (err, user) {
     if (err) {
@@ -22,11 +21,13 @@ router.post("/pushNotification", async (req, res) => {
 
       let messages = [];
 
+      console.log("expoPushToken", expoPushToken);
+
       messages.push({
         to: expoPushToken,
         sound: "default",
-        body: "You have a new request!",
-        title: "New Request",
+        body: "Someone has requested your help and would like to chat!",
+        title: "Chat request",
       });
 
       let chunks = expo.chunkPushNotifications(messages);
@@ -38,7 +39,7 @@ router.post("/pushNotification", async (req, res) => {
         for (let chunk of chunks) {
           try {
             let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-            console.log(ticketChunk);
+            console.log("Notification Validation", ticketChunk);
             tickets.push(...ticketChunk);
             // NOTE: If a ticket contains an error code in ticket.details.error, you
             // must handle it appropriately. The error codes are listed in the Expo

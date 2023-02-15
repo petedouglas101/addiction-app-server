@@ -17,6 +17,12 @@ const blogPostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId, // This is the id of the comment
+      ref: "Comment",
+    },
+  ],
 });
 
 mongoose.model("BlogPost", blogPostSchema);
