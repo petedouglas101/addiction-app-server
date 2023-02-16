@@ -16,10 +16,6 @@ const commentSchema = new mongoose.Schema({
 });
 
 const communityPostSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
   content: {
     type: String,
     required: true,
