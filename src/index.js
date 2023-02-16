@@ -1,5 +1,5 @@
 require("./models/User");
-require("./models/BlogPost");
+require("./models/CommunityPost");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -7,7 +7,7 @@ const authRoutes = require("./routes/authRoutes");
 const communityFeedRoutes = require("./routes/communityFeedRoutes");
 const connectRoutes = require("./routes/connectRoutes");
 const pushNotificationsRoutes = require("./routes/pushNotificationsRoutes");
-const requireAuth = require("./middlewares/requireAuth");
+// const requireAuth = require("./middlewares/requireAuth");
 
 const app = express();
 
@@ -30,7 +30,7 @@ mongoose.connection.on("error", (err) => {
   console.error("Error connecting to mongo", err);
 });
 
-app.get("/", requireAuth, (req, res) => {
+app.get("/", (req, res) => {
   res.send(`Your email: ${req.user.email}`);
 });
 
