@@ -2,20 +2,48 @@ const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const User = mongoose.model("User");
+const Volunteer = mongoose.model("Volunteer");
 
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
-  const { email, password, accountType, expoPushToken } = req.body;
+  //Extract username
+  const { email, password, accountType, expoPushToken, username } = req.body;
+  console.log("Account type", accountType);
+  console.log("Username", username);
+  console.log("Expo push token", expoPushToken);
 
-  try {
-    const user = new User({ email, password, accountType, expoPushToken });
-    await user.save();
+  if (accountType === "Volunteer") {
+    try {
+      const volunteer = new Volunteer({
+        email,
+        username,
+        password,
+        expoPushToken,
+      });
+      await volunteer.save();
 
-    const token = jwt.sign({ userId: user._id }, "SECRET_KEY");
-    res.send({ token });
-  } catch (err) {
-    return res.status(422).send(err.message);
+      const token = jwt.sign({ userId: volunteer._id }, "SECRET_KEY");
+      res.send({ token });
+    } catch (err) {
+      return res.status(422).send(err.message);
+    }
+  } else {
+    try {
+      const user = new User({
+        email,
+        username,
+        password,
+        accountType,
+        expoPushToken,
+      });
+      await user.save();
+
+      const token = jwt.sign({ userId: user._id }, "SECRET_KEY");
+      res.send({ token });
+    } catch (err) {
+      return res.status(422).send(err.message);
+    }
   }
 });
 

@@ -27,11 +27,11 @@ router.post("/postToCommunity", async (req, res) => {
 });
 
 router.get("/communityposts", async (req, res) => {
-  // //find all community posts
-  // const communityPosts = await CommunityPost.find({});
-  // res.send(communityPosts);
-  const communityPosts = await CommunityPost.find({ userId: req.user._id });
+  //find all community posts
+  const communityPosts = await CommunityPost.find({});
   res.send(communityPosts);
+  // const communityPosts = await CommunityPost.find({ userId: req.user._id });
+  // res.send(communityPosts);
 });
 
 module.exports = router;

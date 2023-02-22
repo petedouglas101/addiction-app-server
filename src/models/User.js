@@ -7,11 +7,12 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required: true,
   },
-  password: {
+  username: {
     type: String,
+    unique: true,
     required: true,
   },
-  accountType: {
+  password: {
     type: String,
     required: true,
   },
@@ -24,6 +25,12 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: false,
   },
+  previousVolunteers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Volunteer",
+    },
+  ],
 });
 
 userSchema.pre("save", function (next) {
