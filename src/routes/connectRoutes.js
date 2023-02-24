@@ -4,15 +4,25 @@ const mongoose = require("mongoose");
 const requireAuth = require("../middlewares/requireAuth");
 
 const User = mongoose.model("User");
+const Volunteer = mongoose.model("Volunteer");
 
 const router = express.Router();
 
 router.get("/volunteers", async (req, res) => {
-  const volunteers = await User.find({
-    accountType: "Volunteer",
-    isOnline: true,
+  let volunteers = [];
+  volunteers = await User.find({
+    userId: req.user._id,
+    volunteers: { $exists: true },
   });
-  res.send(volunteers);
+  //if the volunteer array is empty, return all online volunteers
+  if (volunteers === 0) {
+    volunteers = await Volunteer.find({
+      isOnline: true,
+    });
+    res.send(volunteers);
+  } else {
+    res.send(volunteers);
+  }
 });
 
 router.post("/addExpoPushToken", async (req, res) => {
