@@ -2,6 +2,7 @@ const { Expo } = require("expo-server-sdk");
 const express = require("express");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const Volunteer = require("../models/Volunteer");
 const User = mongoose.model("User");
 
 const router = express.Router();
@@ -10,7 +11,7 @@ router.post("/pushNotification", async (req, res) => {
   const { volunteerId } = req.body;
   let expoPushToken = "";
 
-  const user1 = User.findById(volunteerId, function (err, user) {
+  const user1 = Volunteer.findById(volunteerId, function (err, user) {
     if (err) {
       console.log(err);
     } else {

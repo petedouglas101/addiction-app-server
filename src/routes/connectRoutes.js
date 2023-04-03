@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/volunteers", async (req, res) => {
   let volunteers = [];
-  volunteers = await User.find({
+  volunteers = await Volunteer.find({
     userId: req.user._id,
     volunteers: { $exists: true },
   });
