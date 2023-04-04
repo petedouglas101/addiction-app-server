@@ -28,6 +28,10 @@ const communityPostSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  username: {
+    type: String,
+    required: false,
+  },
   comments: [commentSchema],
 });
 
