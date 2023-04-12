@@ -9,9 +9,6 @@ const router = express.Router();
 router.post("/signup", async (req, res) => {
   //Extract username
   const { email, password, accountType, expoPushToken, username } = req.body;
-  console.log("Account type", accountType);
-  console.log("Username", username);
-  console.log("Expo push token", expoPushToken);
 
   if (accountType === "Volunteer") {
     try {
@@ -20,6 +17,7 @@ router.post("/signup", async (req, res) => {
         username,
         password,
         expoPushToken,
+        isOnline: true,
       });
       await volunteer.save();
 
@@ -63,7 +61,6 @@ router.post("/signin", async (req, res) => {
   try {
     await user.comparePassword(password);
     const token = jwt.sign({ userId: user._id }, "SECRET_KEY");
-    console.log("Token from signin", token);
     User.findOneAndUpdate(
       { email },
       { isOnline: true },
