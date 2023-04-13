@@ -24,6 +24,11 @@ const volunteerSchema = new mongoose.Schema({
     required: false,
     default: false,
   },
+  isPreviousVolunteer: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Volunteer", volunteerSchema);

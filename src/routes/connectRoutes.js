@@ -21,16 +21,31 @@ router.get("/volunteers", async (req, res) => {
     })
   );
 
-  console.log("Volunteer Objects", volunteerObjects);
+  //Retrieve all volunteers from DB and change isPreviousVolunteer to true if they are in the previousVolunteers array
+  const allVolunteers = await Volunteer.find();
+  const updatedVolunteers = allVolunteers.map((volunteer) => {
+    const volunteerExists = volunteerObjects.some((volunteerObject) =>
+      volunteerObject._id.equals(volunteer._id)
+    );
+    if (volunteerExists) {
+      volunteer.isPreviousVolunteer = true;
+    } else {
+      volunteer.isPreviousVolunteer = false;
+    }
+    return volunteer;
+  });
 
-  if (volunteerObjects.length === 0) {
-    const volunteers = await Volunteer.find({
-      isOnline: true,
-    });
-    res.send(volunteers);
-  } else {
-    res.send(volunteerObjects);
-  }
+  console.log(updatedVolunteers);
+
+  //find all all other volunteers and concat thgenm to the updatedVolunteers array
+  const otherVolunteers = await Volunteer.find({
+    isPreviousVolunteer: false,
+  });
+  const allVolunteersArray = updatedVolunteers.concat(otherVolunteers);
+
+  console.log("AllVolunteersArray: ", allVolunteersArray);
+
+  res.send(allVolunteersArray);
 });
 
 router.post("/addExpoPushToken", async (req, res) => {
