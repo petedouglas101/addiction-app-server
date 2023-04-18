@@ -53,28 +53,27 @@ router.post("/signin", async (req, res) => {
   }
 
   const user = await User.findOne({ email });
+  const volunteer = await Volunteer.findOne({ email });
 
-  if (!user) {
+  if (!user && !volunteer) {
     return res.status(422).send({ error: "Invalid password or email" });
   }
-
-  try {
-    await user.comparePassword(password);
-    const token = jwt.sign({ userId: user._id }, "SECRET_KEY");
-    User.findOneAndUpdate(
-      { email },
-      { isOnline: true },
-      function (err, result) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("User is now online");
-        }
-      }
-    );
-    res.send({ token, accountType: user.accountType });
-  } catch (err) {
-    return res.status(422).send({ error: "Incorrect password or email" });
+  if (user && !volunteer) {
+    try {
+      await user.comparePassword(password);
+      const token = jwt.sign({ userId: user._id }, "SECRET_KEY");
+      res.send({ token });
+    } catch (err) {
+      return res.status(422).send({ error: "Incorrect password or email" });
+    }
+  } else {
+    try {
+      await volunteer.comparePassword(password);
+      const token = jwt.sign({ volunteerId: volunteer._id }, "SECRET_KEY");
+      res.send({ token });
+    } catch (err) {
+      return res.status(422).send({ error: "Incorrect password or email" });
+    }
   }
 });
 

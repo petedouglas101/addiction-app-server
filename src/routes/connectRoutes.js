@@ -1,15 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
-const requireAuth = require("../middlewares/requireAuth");
-
 const User = mongoose.model("User");
 const Volunteer = mongoose.model("Volunteer");
 
+const requireAuth = require("../middlewares/requireAuth");
+
 const router = express.Router();
 
+router.use(requireAuth);
+
 router.get("/volunteers", async (req, res) => {
-  //get previous volunteers from user
   const user = await User.findOne({ _id: req.user._id });
   const volunteers = user.previousVolunteers;
   const volunteerObjects = await Promise.all(
@@ -21,7 +21,6 @@ router.get("/volunteers", async (req, res) => {
     })
   );
 
-  //Retrieve all volunteers from DB and change isPreviousVolunteer to true if they are in the previousVolunteers array
   const allVolunteers = await Volunteer.find();
   const updatedVolunteers = allVolunteers.map((volunteer) => {
     const volunteerExists = volunteerObjects.some((volunteerObject) =>
@@ -35,17 +34,17 @@ router.get("/volunteers", async (req, res) => {
     return volunteer;
   });
 
-  console.log(updatedVolunteers);
-
-  //find all all other volunteers and concat thgenm to the updatedVolunteers array
   const otherVolunteers = await Volunteer.find({
     isPreviousVolunteer: false,
   });
   const allVolunteersArray = updatedVolunteers.concat(otherVolunteers);
 
-  console.log("AllVolunteersArray: ", allVolunteersArray);
+  const uniqueVolunteers = allVolunteersArray.filter(
+    (volunteer, index, self) =>
+      index === self.findIndex((t) => t.email === volunteer.email)
+  );
 
-  res.send(allVolunteersArray);
+  res.send(uniqueVolunteers);
 });
 
 router.post("/addExpoPushToken", async (req, res) => {
