@@ -18,11 +18,11 @@ module.exports = (req, res, next) => {
 
     console.log("RequireAuth Called");
 
-    const { userId } = payload;
-    const { volunteerId } = payload;
+    const { userId, volunteerId } = payload;
 
     const user = await User.findById(userId);
     const volunteer = await Volunteer.findById(volunteerId);
+
 
     if (user && !volunteer) {
       req.user = user;

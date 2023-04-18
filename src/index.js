@@ -16,6 +16,7 @@ app.use(authRoutes);
 app.use(communityFeedRoutes);
 app.use(connectRoutes);
 app.use(pushNotificationsRoutes);
+// app.use(requireAuth);
 
 const mongoURI =
   "mongodb+srv://root:root@cluster0.phlbqez.mongodb.net/?retryWrites=true&w=majority";
@@ -31,6 +32,7 @@ mongoose.connection.on("error", (err) => {
 });
 
 app.get("/", requireAuth, (req, res) => {
+  console.log("Request: " + req);
   res.send(`Your email: ${req.user.email}`);
 });
 
