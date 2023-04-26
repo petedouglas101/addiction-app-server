@@ -16,13 +16,10 @@ module.exports = (req, res, next) => {
       return res.status(401).send({ error: "You must be logged in." });
     }
 
-    console.log("RequireAuth Called");
-
     const { userId, volunteerId } = payload;
 
     const user = await User.findById(userId);
     const volunteer = await Volunteer.findById(volunteerId);
-
 
     if (user && !volunteer) {
       req.user = user;

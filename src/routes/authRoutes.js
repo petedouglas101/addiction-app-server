@@ -80,4 +80,10 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+router.get("/getStatus", requireAuth, async (req, res) => {
+  const volunteer = await Volunteer.findOne({ _id: req.volunteer._id });
+  const isOnline = volunteer.isOnline;
+  res.send({ isOnline });
+});
+
 module.exports = router;

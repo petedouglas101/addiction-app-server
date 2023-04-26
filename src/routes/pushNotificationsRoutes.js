@@ -11,6 +11,8 @@ router.post("/pushNotification", async (req, res) => {
   const { volunteerId } = req.body;
   let expoPushToken = "";
 
+  const userWhoSentNotification = await User.findById(req.user._id);
+
   const user1 = Volunteer.findById(volunteerId, function (err, user) {
     if (err) {
       console.log(err);
@@ -26,6 +28,7 @@ router.post("/pushNotification", async (req, res) => {
         sound: "default",
         body: "Someone has requested your help and would like to chat!",
         title: "Chat request",
+        data: { userWhoSentNotification: userWhoSentNotification },
       });
 
       let chunks = expo.chunkPushNotifications(messages);

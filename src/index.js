@@ -1,6 +1,7 @@
 require("./models/User");
 require("./models/CommunityPost");
 require("./models/Volunteer");
+require("./models/CallModel");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");

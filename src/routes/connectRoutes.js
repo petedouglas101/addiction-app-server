@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const Volunteer = mongoose.model("Volunteer");
+const Call = mongoose.model("Call");
 
 const requireAuth = require("../middlewares/requireAuth");
 
@@ -91,6 +92,22 @@ router.post("/removeVolunteerFromUser", async (req, res) => {
     { _id: req.user._id },
     { previousVolunteers }
   );
+});
+
+router.post("/createCall", async (req, res) => {
+  const { volunteerId } = req.body;
+  const signedInUser = await User.findById({ _id: req.user._id });
+  const volunteer = await Volunteer.findById({ _id: volunteerId });
+  const newCall = new Call({
+    user: signedInUser,
+    volunteer,
+  });
+  newCall.save();
+
+  let callObject;
+  newCall.populate().then((call) => {
+    res.send(call);
+  });
 });
 
 module.exports = router;
