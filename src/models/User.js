@@ -1,6 +1,31 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const callSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  volunteer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Volunteer",
+  },
+  date: {
+    type: Date,
+    required: true,
+    default: Date.now,
+  },
+  userNotes: {
+    type: String,
+    required: false,
+  },
+  volunteerNotes: {
+    type: String,
+    required: false,
+  },
+});
+
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -31,6 +56,7 @@ const userSchema = new mongoose.Schema({
       ref: "Volunteer",
     },
   ],
+  calls: [callSchema],
 });
 
 userSchema.pre("save", function (next) {

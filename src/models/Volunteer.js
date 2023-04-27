@@ -1,6 +1,21 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+const profilePicture = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  data: {
+    type: String,
+    required: true,
+  },
+  contentType: {
+    type: String,
+    required: true,
+  },
+});
+
 const volunteerSchema = new mongoose.Schema({
   email: {
     type: String,
@@ -29,6 +44,10 @@ const volunteerSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
     default: false,
+  },
+  profilePicture: {
+    type: profilePicture,
+    required: false,
   },
 });
 

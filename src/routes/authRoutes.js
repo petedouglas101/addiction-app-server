@@ -80,6 +80,23 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+router.post("/uploadProfilePicture", async (req, res) => {
+  const { profilePicture } = req.body;
+  const newImage = {
+    name: "profilePicture",
+    data: profilePicture,
+    contentType: "image/png",
+  };
+  const volunteer = await Volunteer.findOneAndUpdate(
+    { _id: req.volunteer._id },
+    { $set: { profilePicture: newImage } },
+    { new: true }
+  );
+
+  await volunteer.save();
+  res.send({ volunteer });
+});
+
 router.get("/getStatus", requireAuth, async (req, res) => {
   const volunteer = await Volunteer.findOne({ _id: req.volunteer._id });
   const isOnline = volunteer.isOnline;

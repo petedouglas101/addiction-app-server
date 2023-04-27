@@ -1,7 +1,6 @@
 require("./models/User");
 require("./models/CommunityPost");
 require("./models/Volunteer");
-require("./models/CallModel");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -40,3 +39,4 @@ app.get("/", requireAuth, (req, res) => {
 app.listen(3000, () => {
   console.log("Listening on port 3000");
 });
+

@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const Volunteer = mongoose.model("Volunteer");
-const Call = mongoose.model("Call");
 
 const requireAuth = require("../middlewares/requireAuth");
 
@@ -94,20 +93,24 @@ router.post("/removeVolunteerFromUser", async (req, res) => {
   );
 });
 
-router.post("/createCall", async (req, res) => {
+router.post("/addCallToDb", async (req, res) => {
   const { volunteerId } = req.body;
-  const signedInUser = await User.findById({ _id: req.user._id });
-  const volunteer = await Volunteer.findById({ _id: volunteerId });
-  const newCall = new Call({
-    user: signedInUser,
-    volunteer,
-  });
-  newCall.save();
+  const volunteer = await Volunteer.findOne({ _id: volunteerId });
+  const user = await User.findOne({ _id: req.user._id });
 
-  let callObject;
-  newCall.populate().then((call) => {
-    res.send(call);
-  });
+  const newCall = {
+    user: user,
+    volunteer: volunteer,
+  };
+  try {
+    await User.findByIdAndUpdate(
+      { _id: req.user._id },
+      { $push: { calls: newCall } }
+    );
+    res.status(200).send("Call added to DB");
+  } catch (err) {
+    res.status(422).send(err.message);
+  }
 });
 
 module.exports = router;
