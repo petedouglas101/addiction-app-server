@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const User = mongoose.model("User");
 const Volunteer = mongoose.model("Volunteer");
+const Call = mongoose.model("Call");
 
 const requireAuth = require("../middlewares/requireAuth");
 
@@ -98,19 +99,39 @@ router.post("/addCallToDb", async (req, res) => {
   const volunteer = await Volunteer.findOne({ _id: volunteerId });
   const user = await User.findOne({ _id: req.user._id });
 
-  const newCall = {
-    user: user,
-    volunteer: volunteer,
-  };
+  const call = new Call({
+    user,
+    volunteer,
+  });
   try {
-    await User.findByIdAndUpdate(
-      { _id: req.user._id },
-      { $push: { calls: newCall } }
-    );
-    res.status(200).send("Call added to DB");
+    await call.save();
+
+    res.send({ call });
   } catch (err) {
-    res.status(422).send(err.message);
+    console.log(err);
   }
+});
+
+router.post("/addNotesToCall", async (req, res) => {
+  const { callId, notes } = req.body;
+  await Call.findOneAndUpdate({ _id: callId }, { userNotes: notes });
+  res.status(200).send("Notes added");
+});
+
+router.post("/retrieveCalls", async (req, res) => {
+  const { volunteerId } = req.body;
+  console.log("User", req);
+  console.log("Volunteer", volunteerId);
+
+  //get calls that contain volunteerId and userid
+  const calls = await Call.find({
+    volunteer: volunteerId,
+    user: req.user._id,
+  }).populate("volunteer");
+
+  console.log(calls);
+
+  res.send(calls);
 });
 
 module.exports = router;
