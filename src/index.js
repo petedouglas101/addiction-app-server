@@ -17,7 +17,6 @@ app.use(authRoutes);
 app.use(communityFeedRoutes);
 app.use(connectRoutes);
 app.use(pushNotificationsRoutes);
-// app.use(requireAuth);
 
 const mongoURI =
   "mongodb+srv://root:root@cluster0.phlbqez.mongodb.net/?retryWrites=true&w=majority";

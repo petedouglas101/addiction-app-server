@@ -35,4 +35,26 @@ router.get("/communityposts", async (req, res) => {
   res.send(communityPosts);
 });
 
+router.post("/addComment", async (req, res) => {
+  const { comment, id } = req.body;
+  //find the post with the id
+  await CommunityPost.findOneAndUpdate(
+    { _id: id },
+    {
+      $push: {
+        comments: {
+          content: comment,
+          date: Date.now(),
+          userId: req.user._id,
+        },
+      },
+    }
+  );
+  res.send("Comment added");
+});
+
+router.get("/fetchComments", async (req, res) => {
+  const { id } = req.query;
+});
+
 module.exports = router;

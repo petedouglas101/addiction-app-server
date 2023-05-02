@@ -8,7 +8,6 @@ const Volunteer = mongoose.model("Volunteer");
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
-  //Extract username
   const { email, password, accountType, expoPushToken, username } = req.body;
 
   if (accountType === "Volunteer") {

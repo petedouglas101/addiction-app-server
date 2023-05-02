@@ -123,7 +123,6 @@ router.post("/retrieveCalls", async (req, res) => {
   console.log("User", req);
   console.log("Volunteer", volunteerId);
 
-  //get calls that contain volunteerId and userid
   const calls = await Call.find({
     volunteer: volunteerId,
     user: req.user._id,
